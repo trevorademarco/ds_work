@@ -1,0 +1,21 @@
+# had trouble uploading notebook heres the code
+
+import pandas as pd
+from scipy import stats
+
+df = pd.read_csv('DA-_-houseprices.csv')
+df.shape
+df.info()
+df['mszoning'].nunique()
+df['street'].nunique()
+df['saleprice'].describe()
+df['lotarea'].describe()
+
+openPorch = df.iloc[(df['openporchsf'] > 0).values]
+openPorch.info()
+
+openPorchNo = df.iloc[(df['openporchsf'] == 0).values]
+openPorchNo.info()
+
+stats.ttest_ind(openPorch['saleprice'], openPorchNo['saleprice'])
+df['lotarea'].corr(df['saleprice'])
