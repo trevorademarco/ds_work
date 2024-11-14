@@ -1,0 +1,44 @@
+# To keep the page organized, do all imports here
+from sqlalchemy import create_engine, text
+import pandas as pd
+
+# Matplotlib for additional customization
+from matplotlib import pyplot as plt
+%matplotlib inline
+import seaborn as sns 
+sns.set()
+
+# Suppress warnings (warnings do not prevent the code from executing)
+import warnings
+warnings.filterwarnings("ignore")
+
+# Database credentials
+postgres_user = 'dabc_student'
+postgres_pw = '7*.8G9QH21'
+postgres_host = '142.93.121.174'
+postgres_port = '5432'
+postgres_db = 'houseprices'
+
+# Use the credentials to start a connection
+engine = create_engine('postgresql://{}:{}@{}:{}/{}'.format(
+    postgres_user, postgres_pw, postgres_host, postgres_port, postgres_db))
+prices_df = pd.read_sql_query(text('SELECT * FROM houseprices'), con=engine.connect())
+
+# Remove the connection
+engine.dispose()
+
+# Add your code here
+
+sns.histplot(prices_df['saleprice'])
+sns.boxplot(prices_df['saleprice'])
+sns.boxplot(prices_df['lotarea'])
+
+lotArea = prices_df['lotarea']
+lotArea50 = lotArea[lotArea <= 50000]
+sns.boxplot(lotArea50)
+
+sns.boxplot(prices_df['overallcond'])
+sns.boxplot(y = "saleprice", x = "overallcond", data = prices_df)
+sns.boxplot(y = "saleprice", x = "overallcond", hue = "centralair", data = prices_df)
+
+sns.scatterplot(x = "saleprice", y = "lotarea", data = prices_df)
